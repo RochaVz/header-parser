@@ -21,8 +21,12 @@ app.get('/', function (req, res) {
 });
 
 // your first API endpoint...
-app.get('/api/hello', function (req, res) {
-  res.json({ greeting: 'hello API' });
+app.get('/api/whoami', function (req, res) {
+  const lang = req.headers['accept-language'];
+  const ip = req.headers['x-forwarded-for'].split(',')[0];
+  const system =  req.headers['user-agent'];
+  
+  res.json({ ipaddress: ip, language:lan,software:system});
 });
 
 // listen for requests :)
@@ -30,13 +34,3 @@ var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
-let responseObject = {}
-app.enable('trust proxy')
-app.get('/api/whoami', (request, response) => {
-  responseObject['ipaddress'] = request.ip
-  responseObject['language'] = request.get('Accept-Language')
-  responseObject['sofware'] = request.get('User-Agent')
-
-  response.json(responseObject)
-
-});
